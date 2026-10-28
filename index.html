@@ -766,6 +766,27 @@
             color: var(--warning-text);
         }
 
+        .retry-question-btn {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: transparent;
+            border: 1px solid var(--hairline-strong);
+            border-radius: var(--radius-sm);
+            color: var(--slate);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color var(--ease), color var(--ease);
+        }
+
+        .retry-question-btn:hover {
+            background: var(--surface);
+            color: var(--ink);
+        }
+
         .question-text {
             font-size: 18px;
             font-weight: 600;
@@ -2180,6 +2201,12 @@
                 chooseText = `<span class="question-type-tag">Chọn ${numAnswers} đáp án</span>`;
             }
 
+            const isAnswered = answeredCorrectly.has(currentIndex) || answeredWrong.has(currentIndex);
+            let retryBtn = '';
+            if (currentMode === 'quiz' && isAnswered) {
+                retryBtn = `<button class="retry-question-btn" onclick="retryQuestion()">↻ Làm lại câu này</button>`;
+            }
+
             let optionsHTML = '';
             q.options.forEach((opt, i) => {
                 const selected = userAnswers[currentIndex] && userAnswers[currentIndex].includes(i);
@@ -2220,6 +2247,7 @@
                         <span class="question-module-tag" data-module="${q.module}">Module ${q.module}</span>
                         <span class="question-number">Câu ${currentIndex + 1}/${quizQuestions.length}</span>
                         ${chooseText}
+                        ${retryBtn}
                     </div>
                     <div class="question-text">${q.question}</div>
                     <div class="options-list">${optionsHTML}</div>
@@ -2340,6 +2368,14 @@
                 answeredWrong.add(currentIndex);
             }
 
+            renderQuestion();
+        }
+
+        // ==================== RETRY QUESTION (Quiz mode) ====================
+        function retryQuestion() {
+            delete userAnswers[currentIndex];
+            answeredCorrectly.delete(currentIndex);
+            answeredWrong.delete(currentIndex);
             renderQuestion();
         }
 
