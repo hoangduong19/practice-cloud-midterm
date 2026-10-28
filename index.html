@@ -2294,6 +2294,7 @@
                     if (answeredCorrectly.has(currentIndex) || answeredWrong.has(currentIndex)) {
                         nextBtn.textContent = 'Xem kết quả 🏁';
                         nextBtn.style.display = 'flex';
+                        nextBtn.disabled = false;
                     } else {
                         nextBtn.style.display = 'flex';
                         nextBtn.textContent = 'Tiếp →';
